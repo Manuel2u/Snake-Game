@@ -7,11 +7,17 @@ let snakeX = 10;
 let snakeY = 10;
 let tileCount = 20;
 let tileSize = canvas.width / tileCount - 2;
+let foodX = 10;
+let foodY = 8;
+let score = 0;
 
 
 function drawGame(){
     clearScreen();
     drawSnake();
+    drawFood();
+    generateFood();
+    gameScore();
 
     setTimeout(drawGame, 1000/gameSpeed);
 }
@@ -41,6 +47,27 @@ document.addEventListener('keydown', function(event){
     }
 
 });
+
+
+function drawFood(){
+    ctx.fillStyle = 'red';
+    ctx.fillRect(foodX * tileCount, foodY * tileCount, tileSize, tileSize);
+}
+
+function generateFood(){
+    if(foodX == snakeX && foodY == snakeY){
+        foodX = Math.floor(Math.random() * tileCount);
+        foodY = Math.floor(Math.random() * tileCount);
+        score++;
+    }
+}
+
+function gameScore(){
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'white';
+    ctx.fillText('Score : ' + score, 305, 20);
+}
+    
 
 
 
