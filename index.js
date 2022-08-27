@@ -2,6 +2,8 @@ const canvas = document.getElementById('game');
 
 const ctx = canvas.getContext('2d');
 
+let snake = [];
+
 let gameSpeed = 7;
 let snakeX = 10;
 let snakeY = 10;
@@ -18,6 +20,7 @@ function drawGame(){
     drawFood();
     generateFood();
     gameScore();
+    
 
     setTimeout(drawGame, 1000/gameSpeed);
 }
@@ -30,6 +33,11 @@ function clearScreen(){
 function drawSnake(){
     ctx.fillStyle = 'orange';
     ctx.fillRect(snakeX * tileCount, snakeY * tileCount, tileSize, tileSize);
+    for(let i = 0; i < snake.length; i++){
+        ctx.fillStyle = 'green';
+        ctx.fillRect(snake[i].x * tileCount, snake[i].y * tileCount, tileSize, tileSize);
+    }
+
 }
 
 document.addEventListener('keydown', function(event){
@@ -55,7 +63,10 @@ function drawFood(){
 }
 
 function generateFood(){
-    if(foodX == snakeX && foodY == snakeY){
+    if(foodX === snakeX && foodY === snakeY){
+        console.log(foodX);
+        snake.push({x: snakeX-1, y: snakeY});
+        console.log(foodY);
         foodX = Math.floor(Math.random() * tileCount);
         foodY = Math.floor(Math.random() * tileCount);
         score++;
@@ -67,8 +78,9 @@ function gameScore(){
     ctx.fillStyle = 'white';
     ctx.fillText('Score : ' + score, 305, 20);
 }
-    
 
 
 
+
+console.log(snake);
 drawGame();
