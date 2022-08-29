@@ -2,9 +2,17 @@ const canvas = document.getElementById('game');
 
 const ctx = canvas.getContext('2d');
 
-let snake = [];
+class Snakepart {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
 
-let gameSpeed = 7;
+
+let snakePart = [];
+let snaketail = 0;
+let gameSpeed = 5;
 let snakeX = 10;
 let snakeY = 10;
 let tileCount = 20;
@@ -12,68 +20,104 @@ let tileSize = canvas.width / tileCount - 2;
 let foodX = 10;
 let foodY = 8;
 let score = 0;
+let xVelocity = 0;
+let yVeloctiy = 0;
 
 
-function drawGame(){
+function drawGame() {
     clearScreen();
-    drawSnake();
+    changePosition();
     drawFood();
     generateFood();
     gameScore();
-    
+    drawSnake();
 
-    setTimeout(drawGame, 1000/gameSpeed);
+
+    setTimeout(drawGame, 1000 / gameSpeed);
 }
 
-function clearScreen(){
+function clearScreen() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawSnake(){
+function drawSnake() {
+
+    ctx.fillStyle = "green";
+    for (let i = 0; i < snakePart.length; i++) {
+        let part = snakePart[i];
+        ctx.fillRect(part.x * tileCount, part.y * tileCount, tileSize, tileSize);
+    }
+
+    snakePart.push(new Snakepart(snakeX, snakeY));
+    if(snakePart.length > snaketail){
+        snakePart.shift();
+    }
+
+
     ctx.fillStyle = 'orange';
     ctx.fillRect(snakeX * tileCount, snakeY * tileCount, tileSize, tileSize);
-    for(let i = 0; i < snake.length; i++){
-        ctx.fillStyle = 'green';
-        ctx.fillRect(snake[i].x * tileCount, snake[i].y * tileCount, tileSize, tileSize);
-    }
 
 }
 
-document.addEventListener('keydown', function(event){
-    if(event.keyCode == 37 && snakeX > 0){
-        snakeX--;
+function changePosition() {
+    snakeX = snakeX + xVelocity;
+    snakeY = snakeY + yVeloctiy;
+}
+
+document.addEventListener('keydown', function (event) {
+    //Left
+    if (event.keyCode === 37) {
+        if (xVelocity === 1) {
+            return;
+        }
+        xVelocity = -1;
+        yVeloctiy = 0;
     }
-    if(event.keyCode == 38 && snakeY > 0){
-        snakeY--;
+    //Up
+    if (event.keyCode === 38) {
+        if (yVeloctiy === 1) {
+            return;
+        }
+        yVeloctiy = -1;
+        xVelocity = 0;
     }
-    if(event.keyCode == 39 && snakeX < tileCount - 1){
-        snakeX++;
+    //Right
+    if (event.keyCode === 39) {
+        if (xVelocity === -1) {
+            return;
+        }
+        xVelocity = 1;
+        yVeloctiy = 0;
     }
-    if(event.keyCode == 40 && snakeY < tileCount - 1){
-        snakeY++;
+    //Down
+    if (event.keyCode == 40) {
+        if (yVeloctiy === -1) {
+            return;
+        }
+        yVeloctiy = 1;
+        xVelocity = 0;
     }
 
 });
 
 
-function drawFood(){
+function drawFood() {
     ctx.fillStyle = 'red';
     ctx.fillRect(foodX * tileCount, foodY * tileCount, tileSize, tileSize);
 }
 
-function generateFood(){
-    if(foodX === snakeX && foodY === snakeY){
-        console.log(foodX);
-        snake.push({x: snakeX-1, y: snakeY});
-        console.log(foodY);
+function generateFood() {
+    if (foodX === snakeX && foodY === snakeY) {
         foodX = Math.floor(Math.random() * tileCount);
         foodY = Math.floor(Math.random() * tileCount);
         score++;
+        snaketail++;
+        console.log(snaketail);
     }
 }
 
-function gameScore(){
+function gameScore() {
     ctx.font = '20px Arial';
     ctx.fillStyle = 'white';
     ctx.fillText('Score : ' + score, 305, 20);
@@ -81,6 +125,4 @@ function gameScore(){
 
 
 
-
-console.log(snake);
 drawGame();
