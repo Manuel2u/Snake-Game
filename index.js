@@ -12,7 +12,7 @@ class Snakepart {
 
 let snakePart = [];
 let snaketail = 0;
-let gameSpeed = 5;
+let gameSpeed = 2;
 let snakeX = 10;
 let snakeY = 10;
 let tileCount = 20;
@@ -31,6 +31,7 @@ function drawGame() {
     generateFood();
     gameScore();
     drawSnake();
+    gameOver();
 
 
     setTimeout(drawGame, 1000 / gameSpeed);
@@ -113,6 +114,7 @@ function generateFood() {
         foodY = Math.floor(Math.random() * tileCount);
         score++;
         snaketail++;
+        gameSpeed++;
         console.log(snaketail);
     }
 }
@@ -121,6 +123,19 @@ function gameScore() {
     ctx.font = '20px Arial';
     ctx.fillStyle = 'white';
     ctx.fillText('Score : ' + score, 305, 20);
+}
+
+function gameOver(){
+    if (snakeX < 0 || snakeX > tileCount || snakeY < 0 || snakeY > tileCount) {
+        ctx.font = '20px Arial';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Game Over', 150, 200);
+        clearInterval(drawGame);
+        setTimeout(function () {
+            location.reload();  
+        }, 1500);
+    }
+    
 }
 
 
