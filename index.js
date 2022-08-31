@@ -125,15 +125,26 @@ function gameScore() {
     ctx.fillText('Score : ' + score, 305, 20);
 }
 
+
+
+
+
 function gameOver(){
     if (snakeX < 0 || snakeX > tileCount || snakeY < 0 || snakeY > tileCount) {
-        ctx.font = '20px Arial';
+        ctx.font = '50px Arial';
         ctx.fillStyle = 'white';
-        ctx.fillText('Game Over', 150, 200);
+        ctx.fillText('Game Over', 85, 200);
         clearInterval(drawGame);
+        
+        setTimeout(function (){
+            document.querySelector('body').classList.add("game-over");
+        }, 500);
+        let gameOver = new Audio('sounds/gameOver.mp3');
+        gameOver.play();
+        
         setTimeout(function () {
             location.reload();  
-        }, 1500);
+        }, 500);
     }
     
 }
