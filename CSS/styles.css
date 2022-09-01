@@ -1,8 +1,8 @@
-*{
+* {
     box-sizing: border-box;
 }
 
-body{
+body {
     margin: 0;
     padding: 0;
     display: flex;
@@ -11,17 +11,79 @@ body{
     flex-direction: column;
 }
 
-#game{
+button{
+    display: none;
+}
+
+#game {
     box-shadow: black 20px 10px 50px;
 }
 
-footer{
+footer {
     margin-top: 20px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
 }
 
-.game-over{
-    background-color: red;
-    opacity: 0.1;
-  }
+@media(max-width: 480px) {
+
+    #game {
+        width: 75%;
+        height: 75%;
+        margin-bottom: 25px;
+    }
+
+    footer {
+        margin-top: 0;
+        font-size: 15px;
+    }
+    
+    button {
+        background-color: #4CAF50;
+        color: antiquewhite;
+    }
+
+    #up{
+        width: 50px;
+        height: 50px;
+        display: block;
+        
+
+    }
+
+    #down{
+        width: 50px;
+        height: 50px;
+        display: block;
+        position: relative;
+        top: 50px;
+
+
+    }
+
+    #left{
+        width: 50px;
+        height: 50px;
+        display: block;
+        position: relative;
+        top: -50px;
+        left: -50px;
+
+
+    }
+
+    #right{
+        width: 50px;
+        height: 50px;
+        display: block;
+        position: relative;
+        top: -100px;
+        right: -50px;
+
+
+
+
+    }
+
+
+}

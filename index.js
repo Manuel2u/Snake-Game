@@ -25,14 +25,16 @@ let yVeloctiy = 0;
 
 
 function drawGame() {
-    clearScreen();
     changePosition();
+    let result = isgameOver();
+    if (result) {
+        return;
+    }
+    clearScreen();
     drawFood();
     generateFood();
     gameScore();
     drawSnake();
-    gameOver();
-
 
     setTimeout(drawGame, 1000 / gameSpeed);
 }
@@ -51,7 +53,7 @@ function drawSnake() {
     }
 
     snakePart.push(new Snakepart(snakeX, snakeY));
-    if(snakePart.length > snaketail){
+    if (snakePart.length > snaketail) {
         snakePart.shift();
     }
 
@@ -102,6 +104,39 @@ document.addEventListener('keydown', function (event) {
 
 });
 
+// Mobile support
+document.addEventListener('click', function (event) {
+    if (event.target.id === 'left') {
+        if (xVelocity === 1) {
+            return;
+        }
+        xVelocity = -1;
+        yVeloctiy = 0;
+    }
+    if (event.target.id === 'up') {
+        if (yVeloctiy === 1) {
+            return;
+        }
+        yVeloctiy = -1;
+        xVelocity = 0;
+    }
+    if (event.target.id === 'right') {
+        if (xVelocity === -1) {
+            return;
+        }
+        xVelocity = 1;
+        yVeloctiy = 0;
+    }
+    if (event.target.id === 'down') {
+        if (yVeloctiy === -1) {
+            return;
+        }
+        yVeloctiy = 1;
+        xVelocity = 0;
+    }
+}
+);
+
 
 function drawFood() {
     ctx.fillStyle = 'red';
@@ -127,26 +162,48 @@ function gameScore() {
 
 
 
+function isgameOver() {
+    let gameOver = false;
+
+    if (xVelocity === 0 && yVeloctiy === 0) {
+        return false;
+    }
+
+    if (snakeX < 0) {
+        gameOver = true;
+    } else if (snakeX === tileCount) {
+        gameOver = true;
+    } else if (snakeY === tileCount) {
+        gameOver = true;
+    } else if (snakeY < 0) {
+        gameOver = true;
+    }
+
+    for (let i = 0; i < snakePart.length; i++) {
+        let part = snakePart[i];
+        if (snakeX === part.x && snakeY === part.y) {
+            gameOver = true;
+            break;
+        }
+    }
 
 
-function gameOver(){
-    if (snakeX < 0 || snakeX > tileCount || snakeY < 0 || snakeY > tileCount) {
+    if (gameOver) {
         ctx.font = '50px Arial';
         ctx.fillStyle = 'white';
-        ctx.fillText('Game Over', 85, 200);
-        clearInterval(drawGame);
+        ctx.fillText('Game Over !', 75, 200);
         
-        setTimeout(function (){
-            document.querySelector('body').classList.add("game-over");
-        }, 500);
-        let gameOver = new Audio('sounds/gameOver.mp3');
-        gameOver.play();
+
         
+        let audio = new Audio('sounds/gameOver.wav');
+        audio.play();
+
         setTimeout(function () {
-            location.reload();  
-        }, 500);
+            location.reload();
+        }, 3000);
     }
-    
+    return gameOver;
+
 }
 
 
